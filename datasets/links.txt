@@ -1,0 +1,5 @@
+# This American Life Podcast Transcripts:
+https://www.kaggle.com/datasets/shuyangli94/this-american-life-podcast-transcriptsalignments?resource=download
+
+# Amazon Links (Clothing Shoes & Jewelry)
+http://snap.stanford.edu/data/amazon/productGraph/categoryFiles/reviews_Clothing_Shoes_and_Jewelry_5.json.gz
