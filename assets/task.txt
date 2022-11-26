@@ -1,5 +1,4 @@
-Create a framework that does tf-idf transformation, you can use sklearn's tfidf function.
-Keep the following in mind
+Create a framework that does tf-idf transformation, you can use sklearn's tfidf function. Keep following in mind:
 
 * Handle Edge Cases : what happens when new text data arrives
 * Create Unit Tests : check failure scenarios

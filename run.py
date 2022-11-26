@@ -1,7 +1,8 @@
 import argparse
+import numpy as np
 
-from src.data.text_processor import TextProcessor, TextOps
-from src.model.TF_IDF import TF_IDF
+from src.models import TfIdfModel
+from src.utils import TextOps, IO, Visualizer
 
 # python run.py -tc datasets/podcast_transcripts/processed/train.txt -vc datasets/podcast_transcripts/processed/valid.txt
 # python run.py -tc datasets/amazon_clothing/processed/train.txt
@@ -17,26 +18,38 @@ args = parser.parse_args()
 
 op_set = {
     TextOps.LOWER, 
-    TextOps.UNICODE, 
+    TextOps.ASCII, 
     TextOps.STOP_WORDS, 
     TextOps.LEMMATIZE, 
-    TextOps.DIGITS
+    TextOps.DIGITS,
+    TextOps.PUNCTUATIONS
 }
 
-tr_corpus = args.tr_corpus
-tr_data  = TextProcessor(tr_corpus, op_set, min_occur_cnt=10)
+tr_data = IO.read_txt_corpus(args.tr_corpus)
+val_data = IO.read_txt_corpus(args.val_corpus) if args.val_corpus is not None else None
 
-if args.val_corpus is not None:
-    val_corpus = args.val_corpus
-    val_data = TextProcessor(val_corpus, op_set, vocab=tr_data.vocab)
+tf_idf  = TfIdfModel(
+    op_set,
+    stop_words="default",
+    max_df=0.98, 
+    min_df=0.02,
+    max_features=1000,
+)
+out = tf_idf.train(tr_data)
+feature_words = tf_idf.get_feature_names()
 
-tf_idf  = TF_IDF(tr_data, ngram_range=(1, 1), max_df=0.95, min_df=0.05)
-out  = tf_idf.fit_transform()
+print("--> Saving fit transform result:", out.shape)
+IO.save_to_csv(out, "train_result.csv", colnames=feature_words)
 
-# val_out = tf_idf.fit_transform(val_data.get_docs())
+if val_data is not None:
+    val_out = tf_idf.infer(val_data)
+    print("\n--> Val transform result:", val_out.shape)
+    IO.save_to_csv(out, "val_result.csv", colnames=feature_words)
+    Visualizer.vis_heatmap(val_out, "val_data_heatmap.png")
+    Visualizer.vis_closeness(val_out, "val_data_closeness.png")
 
-print("--> Fit transform result:", out.shape)
-print(out)
+print("\n--> Feature Names: Size of", len(feature_words))
+print(feature_words)
 
-print("\n--> Feature Names:")
-print(tf_idf.get_feature_names_out())
+print("\n--> Stop Words:")
+print(tf_idf.get_stop_words())
