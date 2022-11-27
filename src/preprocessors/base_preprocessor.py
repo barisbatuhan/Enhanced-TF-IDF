@@ -7,5 +7,5 @@ class BasePreprocessor:
         """
         Description: Applies the fn that is set by other child constructors
         """
-        assert text is not None
+        assert text is not None, "Text to preprocess cannot be None"
         return self.fn(text)

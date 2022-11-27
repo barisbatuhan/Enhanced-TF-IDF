@@ -4,3 +4,4 @@ tqdm
 nltk
 matplotlib
 pandas
+pytest

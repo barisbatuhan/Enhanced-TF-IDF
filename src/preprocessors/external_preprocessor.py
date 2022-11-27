@@ -8,5 +8,5 @@ class ExternalPreprocessor(BasePreprocessor):
         """
         Description: Directly sets the fn that is an external callable
         """
-        assert callable(fn)
+        assert callable(fn), "Passed argument is not a callable!"
         self.fn = fn
