@@ -5,7 +5,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 # User-defined Files
 from ..tokenizers import LemmaTokenizer, StemTokenizer
 from ..preprocessors import DigitPreprocessor, PuncPreprocessor, MultiPreprocessor, ExternalPreprocessor
-from ..utils import TextOps, ENGLISH_STOP_WORDS
+from ..constants import ENGLISH_STOP_WORDS
+from ..types import TextOps
 
 class TfIdfModel(TfidfVectorizer):
     """
@@ -78,6 +79,8 @@ class TfIdfModel(TfidfVectorizer):
             "If float, min_df should be in range [0.0, 1.0) !"
         assert type(min_df) != int or min_df >= 0, \
             "If int, min_df should be greater than equal to 0 !"
+        assert len(ngram_range) == 2 and ngram_range[0] >= 1 and ngram_range[1] >= 1, \
+            "ngram_range must have 2 items and each item has to be >= 1 !"
         
         self.op_set = op_set
         
@@ -122,6 +125,7 @@ class TfIdfModel(TfidfVectorizer):
         """
         return super().transform(corpus).toarray()
 
+    
     def get_feature_names(self):
         """
         Description: An alias to the 'get_feature_names_out' method in scikit-learn.
@@ -162,27 +166,36 @@ class TfIdfModel(TfidfVectorizer):
         else:
             return None
 
-    def _get_stop_words(self, stop_words):
+    
+    def _get_stop_words(self, stop_words: Union[str, list]):
         """
         Description: Handles three different approaches:
             1) If TextOps.STOP_WORD is not in op_set, then no stop words will be applied
-            2) If stop_words is a string and its value is 'default', detault stop words will be applied.
+            2) If stop_words is a string and its value is '#default', detault stop words will be applied.
             3) If a list of stop words are given, then these will be applied.
 
         Outputs:
             stop_words (List[string]) : final stop words to be applied to the corpus
         """
-        assert type(stop_words) != str or stop_words == "default", \
-            "If stop_words is given as a string, only supported value is 'default' !"
-        assert TextOps.STOP_WORDS not in self.op_set or stop_words is not None, \
-            "If stop words will be discarded from the data, stop_words must be specified !"
 
         if TextOps.STOP_WORDS not in self.op_set:
             return None
-        elif type(stop_words) == str and stop_words == "default":
+        
+        assert stop_words is not None, \
+            "If stop words will be discarded from the data, stop_words must be specified !"
+        
+        if type(stop_words) == str:
+            assert stop_words == "#default", \
+                "If stop_words is given as a string, only supported value is 'default' !"
+        elif type(stop_words) == list:
+            assert len(stop_words) > 0, \
+                "If stop words are given, it cannot be empty !"
+
+        if (len(stop_words) == 1 and stop_words[0] == '#default') or stop_words == "#default":
             return ENGLISH_STOP_WORDS
         else:
             return stop_words
+    
     
     def build_preprocessor(self):
         """
