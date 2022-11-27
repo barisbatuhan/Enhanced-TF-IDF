@@ -20,9 +20,13 @@ class IO:
         """
         assert ".txt" in filepath
 
-        with open(filepath, "r") as f:
-            lines = f.readlines()
-        return lines
+        try:
+            with open(filepath, "r") as f:
+                lines = f.readlines()
+            return lines
+        except:
+            raise UnicodeDecodeError("File to read is not correct !")
+        
 
     
     def save_to_csv(
@@ -40,7 +44,8 @@ class IO:
             rownames (List[Union[str, int, float]]) : name of the rows to save in CSV
             colnames (List[Union[str, int, float]]) : name of the cols to save in CSV
         """
-
+        assert len(filepath) > 4 and filepath[-4:] == ".csv", \
+            "Filepath should have '.csv' extension !"
         assert rownames is None or data.shape[0] == len(rownames)
         assert colnames is None or data.shape[1] == len(colnames)
         assert len(data.shape) == 2, "Given data should be a 2D numpy array"

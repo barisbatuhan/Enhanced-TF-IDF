@@ -13,13 +13,13 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-tc', '--tr_corpus', type=str, required=True, help='txt file path of the train corpus.')
 parser.add_argument('-vc', '--val_corpus', type=str, default=None, help='txt file path of the val corpus.')
 
-parser.add_argument('--lower', action='store_true', help='lower the texts if present.')
-parser.add_argument('--nodigit', action='store_true', help='removes digits from the texts, if present.')
-parser.add_argument('--nopunc', action='store_true', help='removes punctuations from the texts, if present.')
-parser.add_argument('--ascii', action='store_true', help='strip the texts with ascii, if present.')
-parser.add_argument('--unicode', action='store_true', help='strip the texts with unicode, if present.')
-parser.add_argument('--lemmatize', action='store_true', help='lemmatize the texts, if present.')
-parser.add_argument('--stem', action='store_true', help='stem the texts, if present.')
+parser.add_argument('--lower', action='store_true', help='Lower the texts if present.')
+parser.add_argument('--nodigit', action='store_true', help='Removes digits from the texts, if present.')
+parser.add_argument('--nopunc', action='store_true', help='Removes punctuations from the texts, if present.')
+parser.add_argument('--ascii', action='store_true', help='Strip the texts with ascii, if present.')
+parser.add_argument('--unicode', action='store_true', help='Strip the texts with unicode, if present.')
+parser.add_argument('--lemmatize', action='store_true', help='Lemmatize the texts, if present.')
+parser.add_argument('--stem', action='store_true', help='Stem the texts, if present.')
 parser.add_argument(
     '--stop_words', type=str, default=None, 
     help="List the stop words with the format \"w1,w2,w3...,wn\" if they are custom, \
@@ -28,6 +28,8 @@ parser.add_argument(
 parser.add_argument('--min_df', default=0.02, type=float, help='Filter ratio of min. occurring items. In range: [0, 1)')
 parser.add_argument('--max_df', default=0.98, type=float, help='Filter ratio of max. occurring items. In range: (0, 1]')
 parser.add_argument('--max_features', default=None, type=int, help='Maximum number of feature items to select.')
+
+parser.add_argument('--visualize', action='store_true', help='Visualize the heatmap bad closeness of validation data, if present.')
 
 args = parser.parse_args()
 
@@ -80,6 +82,7 @@ val_data = IO.read_txt_corpus(args.val_corpus) if args.val_corpus is not None el
 
 tf_idf  = TfIdfModel(
     op_set,
+    analyzer="word",
     stop_words=sw,
     max_df=args.max_df, 
     min_df=args.min_df,
@@ -106,5 +109,6 @@ if val_data is not None:
     val_out = tf_idf.infer(val_data)
     print("\n--> Val transform result:", val_out.shape)
     IO.save_to_csv(out, "val_result.csv", colnames=feature_words)
-    Visualizer.vis_heatmap(val_out, "val_data_heatmap.png")
-    Visualizer.vis_closeness(val_out, "val_data_closeness.png")
+    if args.visualize:
+        Visualizer.vis_heatmap(val_out, "val_data_heatmap.png")
+        Visualizer.vis_closeness(val_out, "val_data_closeness.png")

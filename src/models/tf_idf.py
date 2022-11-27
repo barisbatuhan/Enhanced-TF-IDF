@@ -21,8 +21,8 @@ class TfIdfModel(TfidfVectorizer):
             fixed_vocabulary_ (bool)            : True if a fixed vocabulary of term to indices 
                                                   mapping is provided by the user.
             idf_ (array of shape (n_features,)) : Inverse document frequency vector.
-            stop_words (Set[string])            : additional stop words that are given in constructor 
-                                                  or occurred in too many/few documents (max_df & min_df).                         
+            stop_words (Set[string])            : stop words that are given in constructor and / or 
+                                                  occurred in too many / few documents (max_df & min_df).
     """
     
     def __init__(
@@ -69,25 +69,27 @@ class TfIdfModel(TfidfVectorizer):
         assert max_features is None or max_features > 0, "'max_features' should be a positive integer !"
         
         assert callable(analyzer) or analyzer in ["word", "char", "char_wb"], \
-            "Analyzer can be a callable or one of [word, char, char_wb] !"
+            "Analyzer can be a callable or one of word, char, or char_wb !"
         
         assert type(max_df) != float or (max_df > 0.0 and max_df <= 1.0), \
-            "If float, max_df should be in range (0.0, 1.0] !"
+            "If float, max_df should be in range > 0.0 and <= 1.0 !"
         assert type(max_df) != int or max_df > 0, \
             "If int, max_df should be greater than 0 !"
         assert type(min_df) != float or (min_df >= 0.0 and min_df < 1.0), \
-            "If float, min_df should be in range [0.0, 1.0) !"
+            "If float, min_df should be in range >= 0.0 and < 1.0 !"
         assert type(min_df) != int or min_df >= 0, \
             "If int, min_df should be greater than equal to 0 !"
         assert len(ngram_range) == 2 and ngram_range[0] >= 1 and ngram_range[1] >= 1, \
             "ngram_range must have 2 items and each item has to be >= 1 !"
-        
-        self.op_set = op_set
+        assert vocabulary is None or type(vocabulary) in [list, set], \
+            "Vocabulary must be either None or a list / set !"
+
+        self.op_set = op_set if op_set is not None else {}
         
         super().__init__(
             input="content",
             strip_accents=self._get_strip_accent(),
-            lowercase=TextOps.LOWER in op_set,
+            lowercase=TextOps.LOWER in self.op_set,
             tokenizer=self._get_tokenizer(),
             analyzer=analyzer,
             stop_words=self._get_stop_words(stop_words),
@@ -95,6 +97,7 @@ class TfIdfModel(TfidfVectorizer):
             vocabulary=vocabulary,
             max_df=max_df,
             min_df=min_df,
+            max_features=max_features,
             binary=binary,
             **kwargs
             )
@@ -110,6 +113,10 @@ class TfIdfModel(TfidfVectorizer):
         Outputs:
             X (np.ndarray)        : 2D numpy Tf-idf-weighted document-term matrix
         """
+        assert corpus is not None, "Corpus cannot be None !"
+        assert type(corpus) == list, "Corpus has to be list of string documents !"
+        assert len(corpus) > 0, "Corpus has to include at least one document!"
+
         return super().fit_transform(corpus).toarray()
 
 
@@ -123,6 +130,10 @@ class TfIdfModel(TfidfVectorizer):
         Outputs:
             X (np.ndarray)        : 2D numpy Tf-idf-weighted document-term matrix
         """
+        assert corpus is not None, "Corpus cannot be None !"
+        assert type(corpus) == list, "Corpus has to be list of string documents !"
+        assert len(corpus) > 0, "Corpus has to include at least one document!"
+        
         return super().transform(corpus).toarray()
 
     
