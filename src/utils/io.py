@@ -14,7 +14,7 @@ class IO:
         """
         Description: Reads the corpus '.json' or '.jsonl' file that includes a list of 
                      dictionaries. Iterates through the dictionaries and selects the 
-                     items that has the 'key'
+                     items that has the 'key'.
         
         Inputs:
             inp_path (string) : Path of the corpus .json or .jsonl file
@@ -40,7 +40,7 @@ class IO:
     def create_corpus_txt_from_json_file(inp_path :str, out_path :str, key :Union[int, str, float]):
         """
         Description: Reads the corpus '.json' file that includes a series of keys and values. Iterates through
-                     the values that are dicts and selects the items that has the 'key'
+                     the values that are dicts and selects the items that has the 'key'.
 
         Inputs:
             inp_path (string) : Path of the corpus .json file
@@ -68,8 +68,7 @@ class IO:
     
     def read_txt_corpus(filepath :str):
         """
-        Description: Reads the corpus '.txt' file that includes a 
-                     document at each line.
+        Description: Reads the corpus '.txt' file that includes a document at each line.
         
         Inputs:
             filepath (string) : Path of the corpus .txt

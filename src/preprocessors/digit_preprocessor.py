@@ -4,7 +4,7 @@ from .base_preprocessor import BasePreprocessor
 
 class DigitPreprocessor(BasePreprocessor):
     """
-    Description: Given a text, removes all the digits in the text
+    Description: Given a text, removes all the digits in the text.
     """
 
     def __init__(self):

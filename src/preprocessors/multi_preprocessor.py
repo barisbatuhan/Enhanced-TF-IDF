@@ -4,8 +4,7 @@ from .base_preprocessor import BasePreprocessor
 
 class MultiPreprocessor(BasePreprocessor):
     """
-    Description: combines multiple preprocessors and applies them
-                 one-by-one
+    Description: Combines multiple preprocessors and applies them one-by-one.
     """
 
     def __init__(self, preprocessor_list: list):

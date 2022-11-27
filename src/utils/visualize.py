@@ -7,7 +7,7 @@ import seaborn as sns
 
 class Visualizer:
     """
-    Description: Collection of basic visualization operations
+    Description: Collection of basic visualization operations.
     """
     def vis_heatmap(data :np.ndarray, filepath :str, color :str="coolwarm"):
         """

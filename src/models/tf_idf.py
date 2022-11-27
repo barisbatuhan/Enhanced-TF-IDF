@@ -155,6 +155,9 @@ class TfIdfModel(TfidfVectorizer):
     -------------------------------------------------------------------------------------- """
     
     def _get_tokenizer(self):
+        """
+        Description: Sets Lemmatizer or Stemmer of NLTK as tokenizer, if requested.
+        """
         assert TextOps.LEMMATIZE not in self.op_set or TextOps.STEM not in self.op_set, \
             "Both Lemmatization and Stemmer cannot be applied together !"
         
@@ -167,6 +170,10 @@ class TfIdfModel(TfidfVectorizer):
     
 
     def _get_strip_accent(self):
+        """
+        Description: Gets the requested strip accents, checks the operation set correctness,
+                     and returns the correct strip accent text for scikit-learn
+        """
         assert TextOps.ASCII not in self.op_set or TextOps.UNICODE not in self.op_set, \
             "Both ASCII and UNICODE cannot be applied together !"
         
@@ -210,7 +217,9 @@ class TfIdfModel(TfidfVectorizer):
     
     def build_preprocessor(self):
         """
-        Overrides of its parent's method since additional preprocessing operations are also required.
+        Description: Overrides of its parent's method since additional preprocessing 
+                     operations are also required. May add DigitPreprocessor or / and 
+                     PuncPreprocessor to the default preprocessor of scikit-learn's if requested.
         """
         preprocessors = [ExternalPreprocessor(super().build_preprocessor())]
         if TextOps.DIGITS in self.op_set:

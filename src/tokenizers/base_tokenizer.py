@@ -14,7 +14,7 @@ class BaseTokenizer:
     
     def __call__(self, text : str):
         """
-        Description: Applies the tokenizer_fn that is set by other child constructors
+        Description: Applies the tokenizer_fn that is set by other child constructors.
         """
         assert text is not None and len(text) > 0, "Text to tokenize cannot be None or empty !"
         assert self.tokenizer is not None, "Tokenizer cannot be empty !"

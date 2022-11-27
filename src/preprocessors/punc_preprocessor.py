@@ -5,8 +5,8 @@ from .base_preprocessor import BasePreprocessor
 
 class PuncPreprocessor(BasePreprocessor):
     """
-    Description: given a text, removes all punctuations and additional whitespaces
-                 created by this removal process
+    Description: Given a text, removes all punctuations and additional whitespaces
+                 created by this removal process.
     """
 
     def __init__(self):

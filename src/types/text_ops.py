@@ -2,7 +2,7 @@ from enum import Enum
 
 class TextOps(Enum):
     """
-    Description: List of available operations for text cleaning
+    Description: List of available operations for text cleaning.
 
     Attributes:
         LOWER        : Lowers the entire corpus
