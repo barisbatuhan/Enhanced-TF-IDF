@@ -9,7 +9,7 @@ clean:
 	rm -rf .pytest_cache
 
 run:
-	python3 run.py
+	python run.py -tc datasets/podcast_transcripts/processed/train.txt -vc datasets/podcast_transcripts/processed/valid.txt
 	@make clean
 
 test:
