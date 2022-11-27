@@ -35,15 +35,16 @@ You can install all the packages by running `pip3 install -r requirements.txt`.
 
 - **Training:**
 
+To train, run the following script (check run.py) aguments for optional parameters:
+
 ```
-# To train, run the following script (check run.py) aguments for optional parameters:
-    python3 run.py -tc [TRAIN_CORPUS_TXT_PATH] -vc [VAL_CORPUS_TXT_PATH_IF_EXISTS]
+$ python3 run.py -tc [TRAIN_CORPUS_TXT_PATH] -vc [VAL_CORPUS_TXT_PATH_IF_EXISTS]
 ```
 
 - **Testing:**
 
 ```
-pytest test.py
+$ pytest test.py
 ```
 
 ## Sample Results
