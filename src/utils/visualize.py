@@ -1,7 +1,9 @@
 import numpy as np
+import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 class Visualizer:
     """
@@ -24,7 +26,7 @@ class Visualizer:
         plt.imshow(data, cmap=color, aspect='auto')
         plt.savefig(filepath)
     
-    def vis_closeness(data :np.ndarray, filepath :str, axis :int=1, color :str="coolwarm"):
+    def vis_closeness(data :np.ndarray, filepath :str, labels:list=None, axis :int=1, color :str="coolwarm"):
         """
         Description: Visualizes the similarities of feature words given the data.
 
@@ -39,14 +41,6 @@ class Visualizer:
             "File path to visualize should be an image file !"
         assert len(data.shape) == 2, \
             "Given data should be a 2D numpy array"
-        
-        # result = np.zeros((data.shape[axis], data.shape[axis]))
-        # for w in range(data.shape[axis]):
-        #     for h in range(data.shape[axis]):
-        #         if axis == 0:
-        #             result[w, h] = cosine_similarity(data[w:w+1, :], data[h:h+1, :])[0,0]
-        #         else:
-        #             result[w, h] = cosine_similarity(data[:, w:w+1], data[:, h:h+1])[0,0]
 
         if axis == 0:
             vecs = data
@@ -54,6 +48,7 @@ class Visualizer:
             vecs = data.T
 
         result = cosine_similarity(vecs, vecs)
-        
-        plt.imshow(result, cmap=color, aspect='auto')
+        if labels is not None:
+            result = pd.DataFrame(data=result, index=labels, columns=labels)
+        sns.heatmap(result)
         plt.savefig(filepath)

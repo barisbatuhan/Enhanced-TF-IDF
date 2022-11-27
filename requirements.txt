@@ -5,3 +5,4 @@ nltk
 matplotlib
 pandas
 pytest
+seaborn

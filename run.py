@@ -111,4 +111,4 @@ if val_data is not None:
     IO.save_to_csv(out, "val_result.csv", colnames=feature_words)
     if args.visualize:
         Visualizer.vis_heatmap(val_out, "val_data_heatmap.png")
-        Visualizer.vis_closeness(val_out, "val_data_closeness.png")
+        Visualizer.vis_closeness(val_out, "val_data_closeness.png", labels=feature_words)
